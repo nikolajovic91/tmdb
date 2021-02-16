@@ -29,7 +29,7 @@ const PersonDetail = () => {
   useEffect(() => {
     getPersonDetail();
   }, []);
-
+ 
   return (
     <div>
       {!loading ? (

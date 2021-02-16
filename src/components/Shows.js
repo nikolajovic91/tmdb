@@ -1,32 +1,41 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import api, { token } from "../api/api";
+
 import Card from "./Card";
 import Search from "./Search";
 
+import { useSelector, useDispatch } from "react-redux";
+import { loadShows } from "../store/actions/shows";
+import { FETCH_POPULAR_SHOWS } from "../store/types";
+
 const Shows = () => {
-  const [results, setResults] = useState([]);
-  const getResult = async () => {
-    const response = await api.get(`/tv/popular?${token}`);
-    setResults(response.data.results);
-    console.log(response.data.results);
-  };
+  const dispatch = useDispatch();
+  const shows = useSelector((state) => state.tv);
 
   const onSubmitHandler = (term) => {
-    api.get(`/search/tv?${token}&query=${term}`).then(res => setResults(res.data.results))
+    api
+      .get(`/search/tv?${token}&query=${term}`)
+      .then((res) =>
+        dispatch({ type: FETCH_POPULAR_SHOWS, payload: res.data.results })
+      );
   };
-  
 
   useEffect(() => {
-    getResult();
+    dispatch(loadShows());
   }, []);
+
   return (
-    <section className='content-wrapper'>
-        <Search onSubmitHandler={onSubmitHandler} />
-        <div className="movies__list">
-      {results.map((show) => (
-        <Card key={show.id} type='show' data={show} />
-      ))}
-    </div>
+    <section className="content-wrapper">
+      <Search onSubmitHandler={onSubmitHandler} />
+      <div className="movies__list">
+        {shows.popular.map((show) => (
+          <Card key={show.id} type="show" data={show} />
+        ))}
+
+        {/* {shows.topRated.map((show) => (
+          <Card key={show.id} type="show" data={show} />
+        ))} */}
+      </div>
     </section>
   );
 };

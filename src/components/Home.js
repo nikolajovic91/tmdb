@@ -4,23 +4,27 @@ import api, { token } from "../api/api";
 import Card from "./Card";
 import Search from "./Search";
 
+import { useSelector, useDispatch } from "react-redux";
+import { loadMovies } from "../store/actions/movies";
+import { loadShows } from "../store/actions/shows";
+import { loadPersons } from "../store/actions/persons";
+import {
+  FETCH_POPULAR_PERSONS,
+  FETCH_POPULAR_MOVIES,
+  FETCH_POPULAR_SHOWS,
+} from "../store/types";
+
 const Home = () => {
+  const dispatch = useDispatch();
+  const state = useSelector((state) => state);
+  console.log(state);
   const [loading, setLoading] = useState(true);
-  const [movies, setMovies] = useState([]);
-  const [shows, setShows] = useState([]);
-  const [persons, setPersons] = useState([]);
-  const getResult = async () => {
-    const m = await api.get(`/movie/popular?${token}`);
-    const t = await api.get(`/tv/popular?${token}`);
-    const p = await api.get(`/person/popular?${token}`);
-    setMovies(m.data.results);
-    setShows(t.data.results);
-    setPersons(p.data.results);
-  };
 
   useEffect(() => {
-    getResult();
-    setLoading(false)
+    dispatch(loadMovies());
+    dispatch(loadShows());
+    dispatch(loadPersons());
+    setLoading(false);
   }, []);
 
   const onSubmitHandler = async (term) => {
@@ -28,46 +32,56 @@ const Home = () => {
     let pers = [];
     let tv = [];
     let films = [];
+    console.log(response);
+
+    // NADJI NEKO BOLJE RESENJE, VIDI KAO ONI STO SU NAPRAVILI NOVU STRANU I NA NJU IMAS LEVO
+    // REZULTATE PO KATEGORIJI I DESNO PRETRAGU ZA TU KATEGORIJU
     response.data.results.map((res) => {
       if (res.media_type === "person") {
-        return pers.push(res);
+        pers.push(res);
+        return dispatch({ type: FETCH_POPULAR_PERSONS, payload: pers });
       } else if (res.media_type === "tv") {
-        return tv.push(res);
+        tv.push(res);
+        return dispatch({ type: FETCH_POPULAR_SHOWS, payload: tv });
       } else {
-        return films.push(res);
+        films.push(res);
+        return dispatch({ type: FETCH_POPULAR_MOVIES, payload: films });
       }
     });
-    setPersons(pers);
-    setShows(tv);
-    setMovies(films);
-    
   };
 
   return (
-    <section className='content-wrapper'>
+    <section className="content-wrapper">
       <Search onSubmitHandler={onSubmitHandler} />
-      {!loading ? <div>
-      <h3>Movies</h3>
-      <div className="movies__list">
-        {movies.map((movie) => (
-          <Card key={movie.id} type="movie" data={movie} />
-        ))}
-      </div>
-      <h3>Shows</h3>
-      <div className="movies__list">
-        {shows.map((show) => (
-          <Card key={show.id} type="show" data={show} />
-        ))}
-      </div>
-      <h3>Persons</h3>
-      <div className="movies__list">
-        {persons.map((person) => (
-          <Card key={person.id} type="person" data={person} />
-        ))}
-      </div>
-      </div>: <div className="loader">
+      {!loading ? (
+        <div>
+          <h3>Movies</h3>
+          <div className="movies__list">
+            {state.movies &&
+              state.movies.popular.map((movie) => (
+                <Card key={movie.id} type="movie" data={movie} />
+              ))}
+          </div>
+          <h3>Shows</h3>
+          <div className="movies__list">
+            {state.shows &&
+              state.shows.popular.map((show) => (
+                <Card key={show.id} type="show" data={show} />
+              ))}
+          </div>
+          <h3>Persons</h3>
+          <div className="movies__list">
+            {state.persons &&
+              state.persons.popular.map((person) => (
+                <Card key={person.id} type="person" data={person} />
+              ))}
+          </div>
+        </div>
+      ) : (
+        <div className="loader">
           <CircularProgress />
-        </div>}
+        </div>
+      )}
     </section>
   );
 };
