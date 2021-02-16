@@ -1,0 +1,28 @@
+.header {
+  width: 100%;
+  @include margins;
+  height: 70px;
+  background-color: rgba(#1355a4,0.3);
+  
+  @include flex-row(space-between, center, no-wrap);
+
+  img {
+    width: 100px;
+    height: 50px
+  }
+
+  nav {
+    @include flex-row(flex-end, center, no-wrap);
+
+    a {
+      margin-left: 30px;
+      font-size: 1.6rem;
+      // color: rgb(40, 40, 40);
+      color: white;
+    }
+
+    .active-link {
+        color: rgb(57, 198, 235)
+    }
+  }
+}

@@ -1,0 +1,41 @@
+@mixin flex-row($justify-content: initial, $align-items: initial, $wrap: wrap) {
+  display: flex;
+  flex-direction: row;
+  justify-content: $justify-content;
+  align-items: $align-items;
+  flex-wrap: $wrap;
+}
+
+@mixin flex-column(
+  $justify-content: initial,
+  $align-items: initial,
+  $wrap: wrap
+) {
+  display: flex;
+  flex-direction: column;
+  justify-content: $justify-content;
+  align-items: $align-items;
+  flex-wrap: $wrap;
+}
+
+@mixin remove-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  overflow: scroll;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@mixin margins {
+  padding: 0 15%;
+  margin: auto;
+
+  @media (max-width: 1024px) {
+    padding: 0 50px;
+  }
+
+  @media (max-width: 768px) {
+    padding: 0 30px;
+  }
+}
