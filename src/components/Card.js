@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useHistory, useRouteMatch } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 const Card = ({ data, type }) => {
   const history = useHistory();
@@ -18,7 +18,7 @@ const Card = ({ data, type }) => {
         className="card"
         onClick={() =>
           history.push({
-            pathname: `/person/${data.id}/${nameToSlug}`,
+            pathname: `/persons/${data.id}/${nameToSlug}`,
             state: { person: data },
           })
         }

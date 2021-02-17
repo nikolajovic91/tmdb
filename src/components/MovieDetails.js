@@ -1,36 +1,27 @@
-import React, { useState, useEffect } from "react";
-import { useLocation, useParams } from "react-router";
-import api, { token } from "../api/api";
-import Card from "./Card";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import {dateFormat, minsToHrs} from '../helpers/convertDate'
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router";
+import Card from "./Card";
+import { CLEAR_MOVIE_DETAILS } from "../store/types";
+import { loadMovieDetails } from "../store/actions/movies";
+import { dateFormat, minsToHrs } from "../helpers/convertDate";
+import imdb from "../assets/img/imdb.png";
 const MovieDetails = () => {
   const { id } = useParams();
 
-  const [detail, setDetail] = useState([]);
-  const [credit, setCredits] = useState([]);
-  const [recommendations, setRecommendations] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const getMovieDetail = async () => {
-    const response = await api.get(`/movie/${id}?${token}`);
-    const credits = await api.get(`/movie/${id}/credits?${token}`);
-    const recomend = await api.get(`/movie/${id}/recommendations?${token}`);
-    setDetail(response.data);
-    setCredits(credits.data.cast.splice(0, 18));
-    setRecommendations(recomend.data.results);
-    setLoading(false);
-    console.log(detail);
-  };
-  const poster = detail.poster_path
-    ? `https://www.themoviedb.org/t/p/w300_and_h450_bestv2/${detail.poster_path}`
+  const dispatch = useDispatch();
+  const { details, credits, loading } = useSelector((state) => state.movies);
+
+  const poster = details.poster_path
+    ? `https://www.themoviedb.org/t/p/w300_and_h450_bestv2/${details.poster_path}`
     : "https://previews.123rf.com/images/apoev/apoev1806/apoev180600131/103284724-default-placeholder-businessman-half-length-portrait-photo-avatar-man-gray-color.jpg";
 
-  const backImg = `https://www.themoviedb.org/t/p/w1920_and_h800_multi_faces/${detail.backdrop_path}`;
+  const backImg = `https://www.themoviedb.org/t/p/w1920_and_h800_multi_faces/${details.backdrop_path}`;
   useEffect(() => {
-    getMovieDetail();
-  }, []);
-
-  
+    dispatch(loadMovieDetails(id));
+    return () => dispatch({ type: CLEAR_MOVIE_DETAILS });
+  }, [id, dispatch]);
 
   return (
     <div>
@@ -49,24 +40,36 @@ const MovieDetails = () => {
               <img src={poster} alt="" />
             </div>
             <div className="movie__info--text">
-              <h1 className="movie__info--title">{detail.title}</h1>
+              <h1 className="movie__info--title">{details.title}</h1>
               <p className="movie__info--genre">
-                { new Date(detail.release_date).toLocaleString("en-Us", dateFormat)}
+                <span>{new Date(details.release_date).toLocaleString(
+                  "en-Us",
+                  dateFormat
+                )}</span>
                 <span>
-                  {detail.genres &&
-                    detail.genres.map((genre) => genre.name + " ")}
+                  {details.genres &&
+                    details.genres.map((genre) => genre.name + " ")}
                 </span>
-                {minsToHrs(detail.runtime)}
+                <span>{minsToHrs(details.runtime)}</span>
               </p>
 
-              <p className="movie__info--tagline">{detail.tagline}</p>
-              <h4>Overview</h4>
-              <p className="movie__info--description">{detail.overview}</p>
+              <p className="movie__info--tagline">{details.tagline}</p>
+              <div className="movie__info--biography">
+                <h4>Overview</h4>
+                <a
+                  href={`https://www.imdb.com/title/${details.imdb_id}`}
+                  rel="noreferrer"
+                  target="_blank"
+                >
+                  <img src={imdb} alt="" />
+                </a>
+              </div>
+              <p className="movie__info--description">{details.overview}</p>
             </div>
           </section>
           <section className="movie__cast">
-            {credit &&
-              credit.map((actor) => (
+            {credits.cast &&
+              credits.cast.map((actor) => (
                 <Card key={actor.id} type="person" data={actor} />
               ))}
           </section>

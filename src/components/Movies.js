@@ -15,7 +15,7 @@ const Movies = () => {
 
   useEffect(() => {
     dispatch(loadMovies());
-  }, []);
+  }, [dispatch]);
 
   const onSubmitHandler = (term) => {
     api
@@ -25,7 +25,7 @@ const Movies = () => {
 
   return (
     <section className="content-wrapper">
-      <Search onSubmitHandler={onSubmitHandler} />
+      <Search onSubmitHandler={onSubmitHandler} placeholder="Search a movie" />
       <div className="movies__list">
         {movies.popular &&
           movies.popular.map((movie) => (

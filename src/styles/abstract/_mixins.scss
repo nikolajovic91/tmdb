@@ -18,6 +18,17 @@
   flex-wrap: $wrap;
 }
 
+@mixin multiRowEllipsis($rowNumber) {
+  display: -webkit-box;
+  -webkit-line-clamp: $rowNumber;
+  line-clamp: $rowNumber;
+  -webkit-box-orient: vertical;
+  box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+}
+
 @mixin remove-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -37,5 +48,9 @@
 
   @media (max-width: 768px) {
     padding: 0 30px;
+  }
+
+  @media (max-width: 450px) {
+    padding: 0 20px;
   }
 }

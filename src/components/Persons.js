@@ -14,7 +14,7 @@ const Persons = () => {
 
   useEffect(() => {
     dispatch(loadPersons());
-  }, []);
+  }, [dispatch]);
 
   const onSubmitHandler = (term) => {
     api
@@ -26,7 +26,7 @@ const Persons = () => {
 
   return (
     <section className="content-wrapper">
-      <Search onSubmitHandler={onSubmitHandler} />
+      <Search onSubmitHandler={onSubmitHandler} placeholder="Search a person" />
       <div className="movies__list">
         {persons.popular.map((person) => (
           <Card key={person.id} type="person" data={person} />

@@ -22,11 +22,11 @@ const Shows = () => {
 
   useEffect(() => {
     dispatch(loadShows());
-  }, []);
+  }, [dispatch]);
 
   return (
     <section className="content-wrapper">
-      <Search onSubmitHandler={onSubmitHandler} />
+      <Search onSubmitHandler={onSubmitHandler} placeholder="Search a tv show" />
       <div className="movies__list">
         {shows.popular.map((show) => (
           <Card key={show.id} type="show" data={show} />

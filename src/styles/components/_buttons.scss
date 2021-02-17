@@ -30,4 +30,42 @@
 
 .content-wrapper {
   min-height: 100vh;
+
+  h3 {
+    @include margins;
+    font-size: 2rem;
+    color: white;
+  }
+}
+
+#side-nav {
+  width: 50px;
+  height: 40px;
+  outline: none;
+  border: none;
+  background-color: transparent;
+  img {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.side-nav {
+  @include flex-column(flex-start, center, no-wrap);
+  margin-top: 100px;
+
+  a, div {
+    font-size: 2rem;
+    margin-bottom: 3rem;
+    color: white;
+    cursor: pointer;
+  }
+
+  .active-link {
+    color: rgb(57, 198, 235)
+  }
+}
+
+.MuiDrawer-paper {
+  background-color: rgba(#1355a4,0.9) !important;
 }

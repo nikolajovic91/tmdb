@@ -14,7 +14,7 @@ function App() {
     <div className="App">
       <Layout />
       <Switch>
-      <Route exact path="/person/:id/:name">
+      <Route exact path="/persons/:id/:name">
           <PersonDetail />
         </Route>
         <Route exact path="/persons">

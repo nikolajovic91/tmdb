@@ -1,8 +1,16 @@
-import api, { popularShows, latestShows, topRatedShows } from "../../api/api";
+import api, {
+  popularShows,
+  latestShows,
+  topRatedShows,
+  showCredits,
+  showDetails,
+} from "../../api/api";
 import {
   FETCH_LATEST_SHOWS,
   FETCH_POPULAR_SHOWS,
   FETCH_TOP_RATED_SHOWS,
+  FETCH_SHOW_DETAILS,
+  FETCH_SHOW_CREDITS
 } from "../types";
 
 export const loadShows = () => async (dispatch) => {
@@ -21,4 +29,25 @@ export const loadShows = () => async (dispatch) => {
     type: FETCH_LATEST_SHOWS,
     payload: [latest.data],
   });
+};
+
+export const loadShowDetails = (id) => async (dispatch) => {
+  const details = await api.get(showDetails(id));
+  const credits = await api.get(showCredits(id));
+
+  dispatch({
+    type: FETCH_SHOW_DETAILS,
+    payload: {
+      details: details.data,
+      loading: false
+    }
+    
+  })
+  dispatch({
+    type: FETCH_SHOW_CREDITS,
+    payload: {
+      credits: credits.data,
+      loading: false
+    }
+  })
 };
