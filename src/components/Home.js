@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import api, { token } from "../api/api";
 import Card from "./Card";
 import Search from "./Search";
+import { motion } from "framer-motion";
 
 import { useSelector, useDispatch } from "react-redux";
 import { loadMovies } from "../store/actions/movies";
@@ -60,26 +61,38 @@ const Home = () => {
       />
       {!loading && state.movies ? (
         <div>
-          <h3>Movies</h3>
-          <div className="movies__list">
+          <motion.h3 animate={{ opacity:1 }} initial={{ opacity: 0 }}>Movies</motion.h3>
+          <motion.div
+            className="movies__list"
+            initial={{ opacity: 0, x: '100vw' }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ type: 'tween', delay: 0.3, duration:0.3 }}
+          >
             {state.movies &&
-              state.movies.popular.slice(0,8).map((movie) => (
-                <Card key={movie.id} type="movie" data={movie} />
-              ))}
-          </div>
-          <h3>Shows</h3>
-          <div className="movies__list">
+              state.movies.popular
+                .slice(0, 8)
+                .map((movie) => (
+                  <Card key={movie.id} type="movie" data={movie} />
+                ))}
+          </motion.div>
+          <motion.h3 animate={{ opacity:1 }} initial={{ opacity: 0 }}>Shows</motion.h3>
+          <motion.div className="movies__list"
+           initial={{ x: "-100vw" }} animate={{ x: 0 }}
+           transition={{ type: 'tween', delay: 0.6, duration:0.3 }}
+          >
             {state.tv &&
-              state.tv.popular.slice(0,8).map((show) => (
-                <Card key={show.id} type="show" data={show} />
-              ))}
-          </div>
+              state.tv.popular
+                .slice(0, 8)
+                .map((show) => <Card key={show.id} type="show" data={show} />)}
+          </motion.div>
           <h3>Persons</h3>
           <div className="movies__list">
             {state.persons &&
-              state.persons.popular.slice(0,8).map((person) => (
-                <Card key={person.id} type="person" data={person} />
-              ))}
+              state.persons.popular
+                .slice(0, 8)
+                .map((person) => (
+                  <Card key={person.id} type="person" data={person} />
+                ))}
           </div>
         </div>
       ) : (

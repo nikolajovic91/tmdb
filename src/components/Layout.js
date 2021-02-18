@@ -1,9 +1,8 @@
+import Drawer from "@material-ui/core/Drawer";
 import React, { useState } from "react";
-import Header from "./Header";
 // import Search from "./Search";
 import { useHistory } from "react-router-dom";
-import { NavLink } from "react-router-dom";
-import Drawer from "@material-ui/core/Drawer";
+import Header from "./Header";
 const Layout = () => {
   const history = useHistory();
   const [isOpenSidenav, setIsOpenSidenav] = useState(false);
