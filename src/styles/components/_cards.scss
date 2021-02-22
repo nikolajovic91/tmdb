@@ -148,8 +148,8 @@
     font-size: 1.6rem;
     margin-bottom: 3rem;
 
-    span:after,
-    span:before {
+    span:nth-child(2):after,
+    span:nth-child(2):before {
       content: "\A";
       width: 10px;
       height: 10px;

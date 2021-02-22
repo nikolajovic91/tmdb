@@ -14,11 +14,12 @@
   nav {
     @include flex-row(flex-end, center, no-wrap);
 
-    a {
+    a, div {
       margin-left: 30px;
       font-size: 1.6rem;
       // color: rgb(40, 40, 40);
       color: white;
+      cursor: pointer;
     }
 
     .active-link {

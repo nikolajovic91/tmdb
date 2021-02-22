@@ -6,7 +6,7 @@ import Search from "./Search";
 
 import { useSelector, useDispatch } from "react-redux";
 import { loadShows } from "../store/actions/shows";
-import { FETCH_POPULAR_SHOWS } from "../store/types";
+import { FETCH_SEARCHED_SHOWS } from "../store/types";
 import { useLocation } from "react-router-dom";
 import queryString from "query-string";
 
@@ -20,7 +20,7 @@ const Shows = () => {
   console.log(parsed.query);
   const onSubmitHandler = (term) => {
     api.get(`/search/tv?${token}&query=${term}`).then((res) => {
-      dispatch({ type: FETCH_POPULAR_SHOWS, payload: res.data.results });
+      dispatch({ type: FETCH_SEARCHED_SHOWS, payload: res.data.results });
       setCurrentShows(term);
     });
   };
@@ -31,7 +31,6 @@ const Shows = () => {
     } else {
       dispatch(loadShows());
     }
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -41,6 +40,11 @@ const Shows = () => {
         onSubmitHandler={onSubmitHandler}
         placeholder="Search a tv show"
       />
+      <div className="movies__list">
+        {shows.searched.map((show) => (
+          <Card key={show.id} type="show" data={show} query={currentShows} />
+        ))}
+      </div>
       <div className="movies__list">
         {shows.popular.map((show) => (
           <Card key={show.id} type="show" data={show} query={currentShows} />

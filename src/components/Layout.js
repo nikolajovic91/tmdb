@@ -1,10 +1,14 @@
 import Drawer from "@material-ui/core/Drawer";
 import React, { useState } from "react";
 // import Search from "./Search";
+import { CLEAR_SEARCHED_SHOWS } from "../store/types";
+
+import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import Header from "./Header";
 const Layout = () => {
   const history = useHistory();
+  const dispatch = useDispatch();
   const [isOpenSidenav, setIsOpenSidenav] = useState(false);
   const toggleDrawer = () => {
     setIsOpenSidenav(!isOpenSidenav);
@@ -34,6 +38,7 @@ const Layout = () => {
                   onClick={() => {
                     history.push({ pathname: `/shows` });
                     setIsOpenSidenav(false);
+                    dispatch({type: CLEAR_SEARCHED_SHOWS})
                   }}
                 >
                   Tv Shows
